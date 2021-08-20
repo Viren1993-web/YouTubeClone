@@ -25,10 +25,10 @@ const VideoListItem = (props: VideoListItemProps) => {
     const seconds=video.duration%60;
 
     let viewsString=video.views.toString();
-    if(video.views>1_000_000){
-        viewsString=(video.views/1_000_000).toFixed(2)+'m'
-    } else if(video.views>1_000){
-        viewsString=(video.views/1_000).toFixed(2)+'k'
+    if(video.views>1000000){
+        viewsString=(video.views/1000000).toFixed(2)+'m'
+    } else if(video.views>1000){
+        viewsString=(video.views/1000).toFixed(2)+'k'
     }
     return (
         <View style={styles.videoCard}>
