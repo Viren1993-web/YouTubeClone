@@ -1,8 +1,9 @@
 import React from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
+import { View, Text, Image, StyleSheet, Pressable } from "react-native";
 import { Entypo } from "@expo/vector-icons";
 import styles from "./styles";
-type VideoListItemProps={
+import { useNavigation } from '@react-navigation/native';
+type VideoListItemProps = {
     video: {
         id: string;
         createdAt: string;
@@ -20,23 +21,27 @@ type VideoListItemProps={
 
 const VideoListItem = (props: VideoListItemProps) => {
     const { video } = props;
+    const navigation = useNavigation();
+    const minutes = Math.floor(video.duration / 60);
+    const seconds = video.duration % 60;
 
-    const minutes= Math.floor(video.duration/60);
-    const seconds=video.duration%60;
+    let viewsString = video.views.toString();
+    if (video.views > 1000000) {
+        viewsString = (video.views / 1000000).toFixed(2) + 'm'
+    } else if (video.views > 1000) {
+        viewsString = (video.views / 1000).toFixed(2) + 'k'
+    }
 
-    let viewsString=video.views.toString();
-    if(video.views>1000000){
-        viewsString=(video.views/1000000).toFixed(2)+'m'
-    } else if(video.views>1000){
-        viewsString=(video.views/1000).toFixed(2)+'k'
+    const openVideoPage = () => {
+        navigation.navigate("VideoScreen");
     }
     return (
-        <View style={styles.videoCard}>
+        <Pressable onPress={openVideoPage} style={styles.videoCard}>
             <View>
                 {/* thumbnail */}
                 <Image style={styles.thumbnail} source={{ uri: video.thumbnail }} />
                 <View style={styles.timeContainer}>
-                    <Text style={styles.time}>{minutes}:{seconds<10?'0':''}{seconds}</Text>
+                    <Text style={styles.time}>{minutes}:{seconds < 10 ? '0' : ''}{seconds}</Text>
                 </View>
             </View>
             {/* title row */}
@@ -52,7 +57,7 @@ const VideoListItem = (props: VideoListItemProps) => {
                 {/* Icon */}
                 <Entypo name="dots-three-vertical" size={16} color="white" />
             </View>
-        </View>
+        </Pressable>
     );
 }
 
