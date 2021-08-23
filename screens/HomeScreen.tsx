@@ -1,20 +1,24 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { View, StyleSheet, FlatList } from "react-native";
-import { Entypo } from "@expo/vector-icons";
 import VideoListItem from "../components/VideoListItem";
-import videos from '../assets/data/videos.json';
+//import videos from '../assets/data/videos.json';
+import { DataStore } from "aws-amplify";
+import { Video } from '../src/models';
 const HomeScreen = () => {
+    const [videos, setVideos] = useState<Video[]>([]);
+    useEffect(() => {
+        //fetch video
+        DataStore.query(Video).then(setVideos);
+    }, []);
     return (
         <View>
             <FlatList
-            data={videos}
-            renderItem={({item})=><VideoListItem video={item}/>}
+                data={videos}
+                renderItem={({ item }) => <VideoListItem video={item} />}
             />
         </View>
     );
-}
+};
 
-const styles = StyleSheet.create({
-
-});
+const styles = StyleSheet.create({});
 export default HomeScreen;

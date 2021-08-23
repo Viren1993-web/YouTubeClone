@@ -15,7 +15,7 @@ import TabOneScreen from '../screens/TabOneScreen';
 import TabTwoScreen from '../screens/TabTwoScreen';
 import HomeScreen from '../screens/HomeScreen';
 import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
-
+import HomeStack from '../navigation/HomeStack';
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
 export default function BottomTabNavigator() {
@@ -24,12 +24,13 @@ export default function BottomTabNavigator() {
   return (
     <BottomTab.Navigator
       initialRouteName="Home"
-      tabBarOptions={{ activeTintColor: Colors[colorScheme].tint, 
-      labelPosition:'below-icon'
+      tabBarOptions={{
+        activeTintColor: Colors[colorScheme].tint,
+        labelPosition: 'below-icon'
       }}>
       <BottomTab.Screen
         name="Home"
-        component={TabOneNavigator}
+        component={HomeStack}
         options={{
           tabBarIcon: ({ color }) => <Foundation name="home" size={24} color={color} />,
         }}
@@ -41,7 +42,7 @@ export default function BottomTabNavigator() {
           tabBarIcon: ({ color }) => <Ionicons name="compass-outline" size={24} color={color} />,
         }}
       />
-      <BottomTab.Screen
+     {/*  <BottomTab.Screen
         name="New"
         component={TabTwoNavigator}
         options={{
@@ -49,19 +50,19 @@ export default function BottomTabNavigator() {
         }}
       />
       <BottomTab.Screen
-        name="Subscriprions"
+        name="Subscriptions"
         component={TabTwoNavigator}
         options={{
           tabBarIcon: ({ color }) => <MaterialIcons name="subscriptions" size={24} color={color} />,
         }}
       />
-<BottomTab.Screen
+      <BottomTab.Screen
         name="Library"
         component={TabTwoNavigator}
         options={{
-          tabBarIcon: ({ color }) => <MaterialIcons name="video-collection" size={24} color={color}/>,
+          tabBarIcon: ({ color }) => <MaterialIcons name="video-collection" size={24} color={color} />,
         }}
-      />
+      /> */}
 
     </BottomTab.Navigator>
   );

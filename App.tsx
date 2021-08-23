@@ -1,17 +1,43 @@
 import 'react-native-gesture-handler';
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-
+import { withAuthenticator } from 'aws-amplify-react-native';
 import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
-import VideoScreen from './screens/VideoScreen/VideoScreen';
-
-export default function App() {
+import  {User}  from './src/models';
+import Amplify, { Auth, DataStore } from "aws-amplify";
+import config from "./src/aws-exports";
+Amplify.configure(config);
+function App() {
   const isLoadingComplete = useCachedResources();
   const colorScheme = useColorScheme();
+  useEffect(() => {
+    const saveUserToDB = async () => {
+      //get user from cognito
+      const userInfo = await Auth.currentAuthenticatedUser();
+      if (!userInfo) {
+        return;
+      }
+      const userId = userInfo.attributes.sub;
 
+      //check is user exists in DB
+      const user = (await DataStore.query(User)).find(user => user.sub === userId);
+      if (!user) {
+        //if not save user to DB
+        await DataStore.save(new User({
+          sub: userId,
+          name: userInfo.attributes.email,
+          subscribers: 0,
+        })
+        );
+      } else {
+        console.log("User already exists in DB");
+      }
+    };
+    saveUserToDB();
+  }, []);
   if (!isLoadingComplete) {
     return null;
   } else {
@@ -24,3 +50,5 @@ export default function App() {
     );
   }
 }
+
+export default withAuthenticator(App);
