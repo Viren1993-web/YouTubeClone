@@ -10,19 +10,38 @@ import VideoComment from '../../components/VideoComment';
 import { AntDesign } from '@expo/vector-icons';
 import { Video, Comment } from '../../src/models';
 import { useRoute } from '@react-navigation/native';
-import { DataStore } from 'aws-amplify';
+import { DataStore, Storage } from 'aws-amplify';
 const VideoScreen = () => {
     const [video, setVideo] = useState<Video | undefined>(undefined);
+    const [videoUrl, setVideoUrl] = useState<string | any>(null);
+    const [image, setImage] = useState<string | any>(null);
     const [comments, setComments] = useState<Comment[]>([]);
     const route = useRoute();
     const videoId = route.params?.id;
     useEffect(() => {
         DataStore.query(Video, videoId).then(setVideo);
-    }, [videoId])
+    }, [videoId]);
+    useEffect(() => {
+        if (!video) {
+            return;
+        }
+        if (video.videoUrl?.startsWith("http")) {
+            setVideoUrl(video.videoUrl);
+        } else {
+            Storage.get(video.videoUrl).then(setVideoUrl);
+        }
+        if (video.thumbnail?.startsWith("http")) {
+            setImage(video.thumbnail);
+        } else {
+            Storage.get(video.thumbnail).then(setImage);
+        }
+    }, [video]);
     useEffect(() => {
         const fetchComments = async () => {
-            if (!video) { return; }
-            const VideoComments = (await DataStore.query(Comment))
+            if (!video) {
+                return;
+            }
+            const videoComments = (await DataStore.query(Comment))
                 .filter(comment => comment.videoID === video.id);
             setComments(videoComments);
         };
@@ -36,22 +55,24 @@ const VideoScreen = () => {
     if (!video) {
         return <ActivityIndicator />;
     }
-    /*   let viewsString = video.views.toString();
-     if (video.views > 1000000) {
-         viewsString = (video.views / 1000000).toFixed(2) + 'm'
-     } else if (video.views > 1000) {
-         viewsString = (video.views / 1000).toFixed(2) + 'k'
-     } */
+   /*  let viewsString = video.views.toString();
+    if (video.views > 1000000) {
+        viewsString = (video.views / 1000000).toFixed(1) + "m";
+    } else if (video.views > 1000) {
+        viewsString = (video.views / 1000).toFixed(1) + "k";
+    } */
     return (
         <View style={{ backgroundColor: '#141414', flex: 1 }}>
             {/* Video player */}
-            <VideoPlayer videoURI={video.videoUrl} thumbnailURI={video.thumbnail} />
+            <VideoPlayer videoURI={videoUrl} thumbnailURI={video.thumbnail} />
             {/* video info */}
             <View style={{ flex: 1 }}>
                 <View style={styles.videoInfoContainer}>
-                    <Text style={styles.tag}>{video.title}</Text>
-                    <Text style={styles.subTitle}>{video.User?.name} {viewsString} {video.createdAt}</Text>
-                    <Text></Text>
+                    <Text style={styles.tag}>{video.tags}</Text>
+                    <Text style={styles.title}>{video.title}</Text>
+                    <Text style={styles.subTitle}>
+                        {video.User?.name} {/* {viewsString} */} {video.createdAt}
+                    </Text>
                 </View>
                 {/* Action list */}
                 <View style={styles.actionListContainer}>
@@ -62,35 +83,35 @@ const VideoScreen = () => {
                         </View>
                         <View style={styles.actionListItem}>
                             <AntDesign name="dislike1" size={30} color="grey" />
-                            <Text style={styles.actionText}>{video.dislikes}</Text>
+                            <Text style={styles.actionText}>{video.dilikes}</Text>
                         </View>
                         <View style={styles.actionListItem}>
                             <AntDesign name="export" size={30} color="grey" />
-                            <Text style={styles.actionText}>{video.dislikes}</Text>
+                            <Text style={styles.actionText}>{video.dilikes}</Text>
                         </View>
                         <View style={styles.actionListItem}>
                             <AntDesign name="download" size={30} color="grey" />
-                            <Text style={styles.actionText}>{video.dislikes}</Text>
+                            <Text style={styles.actionText}>{video.dilikes}</Text>
                         </View>
                         <View style={styles.actionListItem}>
                             <AntDesign name="download" size={30} color="grey" />
-                            <Text style={styles.actionText}>{video.dislikes}</Text>
+                            <Text style={styles.actionText}>{video.dilikes}</Text>
                         </View>
                         <View style={styles.actionListItem}>
                             <AntDesign name="download" size={30} color="grey" />
-                            <Text style={styles.actionText}>{video.dislikes}</Text>
+                            <Text style={styles.actionText}>{video.dilikes}</Text>
                         </View>
                         <View style={styles.actionListItem}>
                             <AntDesign name="download" size={30} color="grey" />
-                            <Text style={styles.actionText}>{video.dislikes}</Text>
+                            <Text style={styles.actionText}>{video.dilikes}</Text>
                         </View>
                         <View style={styles.actionListItem}>
                             <AntDesign name="download" size={30} color="grey" />
-                            <Text style={styles.actionText}>{video.dislikes}</Text>
+                            <Text style={styles.actionText}>{video.dilikes}</Text>
                         </View>
                         <View style={styles.actionListItem}>
                             <AntDesign name="download" size={30} color="grey" />
-                            <Text style={styles.actionText}>{video.dislikes}</Text>
+                            <Text style={styles.actionText}>{video.dilikes}</Text>
                         </View>
                     </ScrollView>
                 </View>
@@ -98,7 +119,7 @@ const VideoScreen = () => {
                 <View style={{ flexDirection: 'row', alignItems: 'center', padding: 10, borderColor: '#3d3d3d', borderTopWidth: 1, borderBottomWidth: 1 }}>
                     <Image style={styles.avatar} source={{ uri: video.User?.image }} />
                     <View style={{ marginHorizontal: 10, flex: 1 }}>
-                        <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>{video.user.name}</Text>
+                        <Text style={{ color: 'white', fontSize: 18, fontWeight: 'bold' }}>{video.User?.name}</Text>
                         <Text style={{ color: 'grey', fontSize: 18 }}>{video.User?.subscribers} subscriber</Text>
                     </View>
                     <Text style={{ color: 'red', fontSize: 20, fontWeight: 'bold' }}>Subscribes</Text>
@@ -119,7 +140,7 @@ const VideoScreen = () => {
                     index={0}
                     backdropComponent={({ style }) => <View style={[style, { backgroundColor: '#101010' }]} />}
                 >
-                    <VideoComments comments={comments} videoID={video.id}/>
+                    <VideoComments comments={comments} videoID={video.id} />
                 </BottomSheetModal>
             </View>
         </View>

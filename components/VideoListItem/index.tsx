@@ -1,25 +1,36 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, Image, Pressable } from "react-native";
 import { Entypo } from "@expo/vector-icons";
 import styles from "./styles";
 import { useNavigation } from '@react-navigation/native';
 import { Video } from '../../src/models';
+import { Storage } from 'aws-amplify';
+
 type VideoListItemProps = {
     video: Video;
 }
 
 const VideoListItem = (props: VideoListItemProps) => {
     const { video } = props;
+    const [image, setImage] = useState<string | null>(null);
     const navigation = useNavigation();
+    useEffect(() => {
+        if(video.thumbnail.startsWith("http")){
+            setImage(video.thumbnail);
+        }else{
+            Storage.get(video.thumbnail).then(setImage);
+        }
+        
+    }, [video]);
     const minutes = Math.floor(video.duration / 60);
     const seconds = video.duration % 60;
 
-    /*  let viewsString = video.views.toString();
-     if (video.views > 1000000) {
-         viewsString = (video.views / 1000000).toFixed(2) + 'm'
-     } else if (video.views > 1000) {
-         viewsString = (video.views / 1000).toFixed(2) + 'k'
-     } */
+    let viewsString = video.views.toString();
+    if (video.views > 1000000) {
+        viewsString = (video.views / 1000000).toFixed(2) + 'm'
+    } else if (video.views > 1000) {
+        viewsString = (video.views / 1000).toFixed(2) + 'k'
+    }
 
     const openVideoPage = () => {
         navigation.navigate("VideoScreen", /* { id, video.id} */);
@@ -28,7 +39,7 @@ const VideoListItem = (props: VideoListItemProps) => {
         <Pressable onPress={openVideoPage} style={styles.videoCard}>
             <View>
                 {/* thumbnail */}
-                <Image style={styles.thumbnail} source={{ uri: video.thumbnail }} />
+                <Image style={styles.thumbnail} source={{ uri: image||"" }} />
                 <View style={styles.timeContainer}>
                     <Text style={styles.time}>{minutes}:{seconds < 10 ? '0' : ''}{seconds}</Text>
                 </View>

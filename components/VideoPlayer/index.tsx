@@ -4,12 +4,11 @@ import { Video } from 'expo-av';
 
 interface VideoPlayerProps {
     videoURI: string;
-    thumbnailURI: string;
+    thumbnailURI?: string;
 };
 
 const VideoPlayer = (props: VideoPlayerProps) => {
     const { videoURI, thumbnailURI } = props;
-   
     return (
         <View>
             <Video 

@@ -10,6 +10,13 @@
       "StackName": "amplify-youtubeclone-staging-182508",
       "StackId": "arn:aws:cloudformation:ap-southeast-2:587402071946:stack/amplify-youtubeclone-staging-182508/1dbdd2a0-02ad-11ec-87b2-06b73804cc02",
       "AmplifyAppId": "d2vilog0itpmmx"
+    },
+    "categories": {
+      "auth": {
+        "youtubeclonee598cbdc": {},
+        "cognitoe598cbdc": {},
+        "YouTubeClone": {}
+      }
     }
   }
 }

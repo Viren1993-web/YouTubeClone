@@ -2,12 +2,10 @@
  * Learn more about createBottomTabNavigator:
  * https://reactnavigation.org/docs/bottom-tab-navigator
  */
-
 import { Ionicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
-
 import Colors from '../constants/Colors';
 import { Foundation, AntDesign, MaterialIcons } from '@expo/vector-icons';
 import useColorScheme from '../hooks/useColorScheme';
@@ -16,6 +14,7 @@ import TabTwoScreen from '../screens/TabTwoScreen';
 import HomeScreen from '../screens/HomeScreen';
 import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
 import HomeStack from '../navigation/HomeStack';
+import VideoUploadScreen from '../screens/VideoUploadScreen';
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
 export default function BottomTabNavigator() {
@@ -42,9 +41,9 @@ export default function BottomTabNavigator() {
           tabBarIcon: ({ color }) => <Ionicons name="compass-outline" size={24} color={color} />,
         }}
       />
-     {/*  <BottomTab.Screen
+      <BottomTab.Screen
         name="New"
-        component={TabTwoNavigator}
+        component={UploadNavigator}
         options={{
           tabBarIcon: ({ color }) => <AntDesign name="pluscircleo" size={24} color={color} />,
         }}
@@ -62,7 +61,7 @@ export default function BottomTabNavigator() {
         options={{
           tabBarIcon: ({ color }) => <MaterialIcons name="video-collection" size={24} color={color} />,
         }}
-      /> */}
+      />
 
     </BottomTab.Navigator>
   );
@@ -97,5 +96,19 @@ function TabTwoNavigator() {
         options={{ headerTitle: 'Tab Two Title' }}
       />
     </TabTwoStack.Navigator>
+  );
+}
+
+const UploadStack = createStackNavigator<TabTwoParamList>();
+
+function UploadNavigator() {
+  return (
+    <UploadStack.Navigator>
+      <UploadStack.Screen
+        name="VideoUpload"
+        component={VideoUploadScreen}
+        options={{ headerTitle: 'Upload a Video' }}
+      />
+    </UploadStack.Navigator>
   );
 }
