@@ -7,17 +7,14 @@ import { v4 as uuidv4 } from 'uuid';
 import { Storage, DataStore, Auth } from 'aws-amplify';
 import * as VideoThumbnails from 'expo-video-thumbnails';
 import { Video, User } from '../src/models'
-import { navigate } from '@react-navigation/routers/lib/typescript/src/CommonActions';
-import Navigation from '../navigation';
 import { useNavigation } from '@react-navigation/core';
-
 
 export default function VideoUploadScreen() {
   const [video, setVideo] = useState<string | null>(null);
   const [duration, setDuration] = useState(0);
   const [title, setTitle] = useState("");
   const [progress, setProgress] = useState(0);
-  const navigation=useNavigation();
+  const navigation = useNavigation();
   useEffect(() => {
     (async () => {
       if (Platform.OS !== 'web') {
@@ -36,8 +33,7 @@ export default function VideoUploadScreen() {
       quality: 1,
     });
 
-    console.log(result);
-
+    //console.log(result);
     if (!result.cancelled) {
       setVideo(result.uri);
       setDuration(Math.floor(result.duration / 100));
@@ -71,7 +67,7 @@ export default function VideoUploadScreen() {
       const fileKey = `${uuidv4()}.mp4`;
       await Storage.put(fileKey, blob, {
         progressCallback: (p) => {
-          console.log(p);
+          //console.log(p);
           setProgress(p.loaded / p.total);
         },
       });
@@ -106,12 +102,12 @@ export default function VideoUploadScreen() {
       likes: 0,
       dilikes: 0,
       userID: user.id,
-    }))
+    }));
     setVideo(null);
     setDuration(0);
     setTitle('');
     setProgress(0);
-    Navigation.navigate("Home");
+    navigation.navigate("Home");
   };
   console.log(video);
   return (

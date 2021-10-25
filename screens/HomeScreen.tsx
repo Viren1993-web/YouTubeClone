@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, StyleSheet, FlatList } from "react-native";
 import VideoListItem from "../components/VideoListItem";
-//import videos from '../assets/data/videos.json';
 import { DataStore } from "aws-amplify";
 import { Video } from '../src/models';
 const HomeScreen = () => {

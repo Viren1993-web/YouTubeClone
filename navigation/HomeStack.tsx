@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, Image, SafeAreaView } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from '../screens/HomeScreen';
+import TabTwoScreen from '../screens/TabTwoScreen';
 import { Feather, AntDesign, FontAwesome } from '@expo/vector-icons';
 const logo = require('../assets/images/logo.png');
 
@@ -17,8 +18,7 @@ function CustomHeader() {
                     flexDirection: 'row',
                     alignItems: 'center',
                     justifyContent: 'space-between'
-                }}
-            >
+                }}>
                 <Image resizeMode='contain' style={{ width: 100, height: 40 }} source={logo} />
                 <View style={{ flexDirection: 'row', width: 150, justifyContent: 'space-between' }}>
                     <Feather name="cast" size={28} color="white" />
@@ -27,7 +27,6 @@ function CustomHeader() {
                     <FontAwesome name="user-circle-o" size={28} color="white" />
                 </View>
             </View>
-
         </SafeAreaView>
     );
 };
@@ -37,8 +36,7 @@ function HomeStackComponent() {
         <HomeStack.Navigator
             screenOptions={{
                 header: () => <CustomHeader />,
-            }}
-        >
+            }}>
             <HomeStack.Screen
                 name="TabTwoScreen"
                 component={HomeScreen}

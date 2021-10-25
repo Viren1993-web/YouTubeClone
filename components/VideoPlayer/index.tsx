@@ -5,7 +5,7 @@ import { Video } from 'expo-av';
 interface VideoPlayerProps {
     videoURI: string;
     thumbnailURI?: string;
-};
+}
 
 const VideoPlayer = (props: VideoPlayerProps) => {
     const { videoURI, thumbnailURI } = props;
@@ -21,7 +21,7 @@ const VideoPlayer = (props: VideoPlayerProps) => {
             resizeMode="contain"
             />
         </View>
-    )
-}
+    );
+};
 
 export default VideoPlayer;

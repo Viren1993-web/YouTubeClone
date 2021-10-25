@@ -13,11 +13,12 @@ import { useRoute } from '@react-navigation/native';
 import { DataStore, Storage } from 'aws-amplify';
 const VideoScreen = () => {
     const [video, setVideo] = useState<Video | undefined>(undefined);
-    const [videoUrl, setVideoUrl] = useState<string | any>(null);
-    const [image, setImage] = useState<string | any>(null);
+    const [videoUrl, setVideoUrl] = useState<string | null>(null);
+    const [image, setImage] = useState<string | null>(null);
     const [comments, setComments] = useState<Comment[]>([]);
     const route = useRoute();
     const videoId = route.params?.id;
+
     useEffect(() => {
         DataStore.query(Video, videoId).then(setVideo);
     }, [videoId]);
@@ -25,17 +26,18 @@ const VideoScreen = () => {
         if (!video) {
             return;
         }
-        if (video.videoUrl?.startsWith("http")) {
+        if (video?.videoUrl.startsWith("http")) {
             setVideoUrl(video.videoUrl);
         } else {
             Storage.get(video.videoUrl).then(setVideoUrl);
         }
-        if (video.thumbnail?.startsWith("http")) {
+        if (video.thumbnail.startsWith("http")) {
             setImage(video.thumbnail);
         } else {
             Storage.get(video.thumbnail).then(setImage);
         }
     }, [video]);
+
     useEffect(() => {
         const fetchComments = async () => {
             if (!video) {
@@ -46,21 +48,21 @@ const VideoScreen = () => {
             setComments(videoComments);
         };
         fetchComments();
-    }, [video])
+    }, [video]);
 
     const commentsSheetRef = useRef<BottomSheetModal>(null);
     const openComments = () => {
         commentsSheetRef.current?.present();
-    }
+    };
     if (!video) {
         return <ActivityIndicator />;
     }
-   /*  let viewsString = video.views.toString();
+    let viewsString = video.views.toString();
     if (video.views > 1000000) {
         viewsString = (video.views / 1000000).toFixed(1) + "m";
     } else if (video.views > 1000) {
         viewsString = (video.views / 1000).toFixed(1) + "k";
-    } */
+    }
     return (
         <View style={{ backgroundColor: '#141414', flex: 1 }}>
             {/* Video player */}
@@ -71,7 +73,7 @@ const VideoScreen = () => {
                     <Text style={styles.tag}>{video.tags}</Text>
                     <Text style={styles.title}>{video.title}</Text>
                     <Text style={styles.subTitle}>
-                        {video.User?.name} {/* {viewsString} */} {video.createdAt}
+                        {video.User?.name} {viewsString} {video.createdAt}
                     </Text>
                 </View>
                 {/* Action list */}
@@ -97,7 +99,7 @@ const VideoScreen = () => {
                             <AntDesign name="download" size={30} color="grey" />
                             <Text style={styles.actionText}>{video.dilikes}</Text>
                         </View>
-                        <View style={styles.actionListItem}>
+                       {/*  <View style={styles.actionListItem}>
                             <AntDesign name="download" size={30} color="grey" />
                             <Text style={styles.actionText}>{video.dilikes}</Text>
                         </View>
@@ -112,7 +114,7 @@ const VideoScreen = () => {
                         <View style={styles.actionListItem}>
                             <AntDesign name="download" size={30} color="grey" />
                             <Text style={styles.actionText}>{video.dilikes}</Text>
-                        </View>
+                        </View> */}
                     </ScrollView>
                 </View>
                 {/* user info */}
@@ -123,7 +125,6 @@ const VideoScreen = () => {
                         <Text style={{ color: 'grey', fontSize: 18 }}>{video.User?.subscribers} subscriber</Text>
                     </View>
                     <Text style={{ color: 'red', fontSize: 20, fontWeight: 'bold' }}>Subscribes</Text>
-
                 </View>
 
                 {/* comments */}

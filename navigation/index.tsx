@@ -7,7 +7,6 @@ import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/
 import { createStackNavigator } from '@react-navigation/stack';
 import * as React from 'react';
 import { ColorSchemeName } from 'react-native';
-
 import NotFoundScreen from '../screens/NotFoundScreen';
 import VideoScreen from '../screens/VideoScreen';
 import { RootStackParamList } from '../types';

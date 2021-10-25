@@ -10,11 +10,11 @@ export default function TabTwoScreen() {
   };
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab Two</Text>
+      <Text style={styles.title}>Sign Out Screen</Text>
       <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="/screens/TabTwoScreen.tsx" />
+      {/* <EditScreenInfo path="/screens/TabTwoScreen.tsx" /> */}
       <Pressable onPress={signOut}>
-      <Text style={styles.title}>SighOut</Text>
+      <Text style={styles.title}>SignOut</Text>
       </Pressable>
     </View>
   );
@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: 'bold',
+    textShadowColor:'red',
   },
   separator: {
     marginVertical: 30,

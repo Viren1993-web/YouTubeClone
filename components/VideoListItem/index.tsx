@@ -4,7 +4,7 @@ import { Entypo } from "@expo/vector-icons";
 import styles from "./styles";
 import { useNavigation } from '@react-navigation/native';
 import { Video } from '../../src/models';
-import { Storage } from 'aws-amplify';
+import { Storage,Analytics } from 'aws-amplify';
 
 type VideoListItemProps = {
     video: Video;
@@ -33,8 +33,9 @@ const VideoListItem = (props: VideoListItemProps) => {
     }
 
     const openVideoPage = () => {
-        navigation.navigate("VideoScreen", /* { id, video.id} */);
-    }
+        Analytics.record({name:"VideoListItemClick"});
+        navigation.navigate("VideoScreen", { id: video.id} );
+    };
     return (
         <Pressable onPress={openVideoPage} style={styles.videoCard}>
             <View>
@@ -47,20 +48,20 @@ const VideoListItem = (props: VideoListItemProps) => {
             {/* title row */}
             <View style={styles.titleRow}>
                 {/* Avatar */}
-                <Image style={styles.avatar} source={{ uri: video.User?.image }}></Image>
+                <Image style={styles.avatar} source={{ uri: video.User?.image }}/>
                 {/* Middle container */}
                 <View style={styles.middleContainer}>
                     <Text style={styles.title}>{video.title}</Text>
                     <Text style={styles.subTitle}>
-                        {video.User?.name || 'No Name'} {/* {viewsString} */} {video.createdAt}</Text>
-                    <Text></Text>
+                        {video.User?.name || 'No Name'} {viewsString} {video.createdAt}
+                        </Text>
                 </View>
                 {/* Icon */}
                 <Entypo name="dots-three-vertical" size={16} color="white" />
             </View>
         </Pressable>
     );
-}
+};
 
 
 export default VideoListItem;

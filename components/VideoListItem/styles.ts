@@ -6,7 +6,6 @@ marginVertical:10
     thumbnail: {
         width: '100%',
         aspectRatio: 16 / 9,
-
     },
     timeContainer: {
         backgroundColor: '#00000099',

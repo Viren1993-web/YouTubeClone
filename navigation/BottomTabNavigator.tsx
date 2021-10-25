@@ -2,12 +2,11 @@
  * Learn more about createBottomTabNavigator:
  * https://reactnavigation.org/docs/bottom-tab-navigator
  */
-import { Ionicons } from '@expo/vector-icons';
+ import * as React from 'react';
+import { Ionicons,Foundation, AntDesign, MaterialIcons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
-import * as React from 'react';
 import Colors from '../constants/Colors';
-import { Foundation, AntDesign, MaterialIcons } from '@expo/vector-icons';
 import useColorScheme from '../hooks/useColorScheme';
 import TabOneScreen from '../screens/TabOneScreen';
 import TabTwoScreen from '../screens/TabTwoScreen';
